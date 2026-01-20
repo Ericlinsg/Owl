@@ -1,42 +1,38 @@
 // Espera o Owlbear Rodeo estar pronto
 OBR.onReady(async () => {
-  console.log("Combat Helper carregado!");
+  console.log("Combat Helper Toggle carregado!");
 
-  // Cria itens de menu de contexto
-  createContextMenu();
+  // Cria item de menu de contexto único
+  createToggleContextMenu();
 
-  // Mostra a lista de tokens em combate
+  // Atualiza lista de tokens em combate no popover
   await refreshCombatList();
 });
 
 // =============================
-// Cria menus de contexto
+// Cria menu de contexto único que adiciona ou remove
 // =============================
-function createContextMenu() {
-  // Add to Combat
+function createToggleContextMenu() {
   OBR.contextMenu.createItem({
-    id: "combat-helper/add-to-combat",
-    label: "Add To Combat",
+    id: "combat-helper/toggle-combat",
+    label: "Add / Remove Combat",
     filter: {
       type: "token",
       layer: ["CHARACTER", "MOUNT"]
     },
     onClick: async (context) => {
-      await addToCombat(context.token.id);
-      await refreshCombatList();
-    }
-  });
+      const tokenId = context.token.id;
+      const token = await OBR.scene.getToken({ id: tokenId });
 
-  // Remove from Combat
-  OBR.contextMenu.createItem({
-    id: "combat-helper/remove-from-combat",
-    label: "Remove From Combat",
-    filter: {
-      type: "token",
-      layer: ["CHARACTER", "MOUNT"]
-    },
-    onClick: async (context) => {
-      await removeFromCombat(context.token.id);
+      // Se não estiver em combate → adiciona
+      if (!token.metadata.combat || !token.metadata.combat.inCombat) {
+        await addToCombat(tokenId);
+      } else {
+        // Se já estiver em combate → remove
+        await removeFromCombat(tokenId);
+      }
+
+      // Atualiza a lista da UI
       await refreshCombatList();
     }
   });
@@ -86,7 +82,7 @@ async function removeFromCombat(tokenId) {
 }
 
 // =============================
-// Lista todos tokens em combate e atualiza UI
+// Atualiza lista de tokens em combate na UI
 // =============================
 async function refreshCombatList() {
   const listContainer = document.getElementById("combat-list");
@@ -114,7 +110,7 @@ async function refreshCombatList() {
 }
 
 // =============================
-// Função de ataque simples (exemplo)
+// Função de ataque simples
 // =============================
 async function attackToken(tokenId) {
   const token = await OBR.scene.getToken({ id: tokenId });
