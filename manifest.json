@@ -4,6 +4,7 @@
   "manifest_version": 1,
   "action": {
     "title": "Combat Helper",
+     "icon": "icon.svg",
     "popover": "index.html",
     "width": 300,
     "height": 200
