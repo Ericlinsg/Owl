@@ -1,13 +1,19 @@
-const btn = document.getElementById("btn");
-
-btn.onclick = async () => {
-  const tokens = await OBR.scene.items.getItems(
-    item => item.layer === "CHARACTER" && item.selected
-  );
-
+// === Função que adiciona tokens ao Combat Helper ===
+async function addToCombatHelper(tokens) {
   for (const token of tokens) {
-    await OBR.scene.items.updateItems([token.id], items => {
-      items[0].x += 100;
-    });
+    // Aqui você coloca a lógica de adicionar ao Combat Helper
+    // Exemplo: se o Combat Helper tiver uma função `addToken(tokenId)`
+    console.log(`Adicionando token ${token.id} ao Combat Helper`);
+    // await CombatHelper.addToken(token.id); // Descomente se existir API real
   }
-};
+}
+
+// === Registrar menu de contexto no OBR ===
+OBR.contextMenus.add({
+  name: "add_to_combat_helper",     // ID interno
+  label: "Add to Combat Helper",    // Texto que aparece no menu
+  layer: "CHARACTER",               // Só aparece para tokens da camada CHARACTER
+  callback: async (clickedToken) => {
+    // Pega todos os tokens selecionados na camada CHARACTER
+    const tokens = await OBR.scene.items.getItems(
+      item => item.layer
