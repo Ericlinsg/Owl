@@ -1,18 +1,18 @@
-// background.js
 OBR.onReady(() => {
-  console.log("Combat Helper background ready!");
+  console.log("Combat Helper ready!");
 
   OBR.contextMenu.createItem({
     id: "combat-helper/toggle-combat",
     label: "Add / Remove Combat",
     filter: {
-      type: "token",
+      type: "token",             // só tokens
       layer: ["CHARACTER", "MOUNT"]
     },
     onClick: async (context) => {
       const tokenId = context.token.id;
       const token = await OBR.scene.getToken({ id: tokenId });
 
+      // Toggle combate
       if (!token.metadata.combat?.inCombat) {
         await OBR.scene.updateToken({
           id: tokenId,
