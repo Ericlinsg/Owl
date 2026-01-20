@@ -6,7 +6,7 @@
     "title": "Combat Helper",
      "icon": "/Owl/icon.svg",
     "popover": "/Owl/index.html",
-    "width": 300,
-    "height": 200
+    "width": 24,
+    "height": 24
   }
 }
