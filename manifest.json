@@ -1,12 +1,13 @@
 {
-  "name": "combat helper",
+  "name": "Combat Helper",
   "version": "1.0.0",
   "manifest_version": 1,
   "action": {
     "title": "Combat Helper",
-     "icon": "/Owl/icon.png",
-    "popover": "/Owl/index.html",
-    "width": 200,
-    "height": 300
-  }
+    "icon": "icon.svg",
+    "popover": "index.html",
+    "width": 300,
+    "height": 200
+  },
+  "background": "background.js"
 }
