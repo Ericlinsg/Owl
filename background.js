@@ -1,4 +1,7 @@
+// background.js
 OBR.onReady(() => {
+  console.log("Combat Helper background ready!");
+
   OBR.contextMenu.createItem({
     id: "combat-helper/toggle-combat",
     label: "Add / Remove Combat",
@@ -15,7 +18,11 @@ OBR.onReady(() => {
           id: tokenId,
           metadata: {
             ...token.metadata,
-            combat: { inCombat: true, hp: token.metadata.hp || 0, ac: token.metadata.ac || 10 }
+            combat: {
+              inCombat: true,
+              hp: token.metadata.hp || 0,
+              ac: token.metadata.ac || 10
+            }
           }
         });
         OBR.notification.show(`${token.name} adicionado ao combate!`);
