@@ -1,10 +1,13 @@
-GitHub Copilot here. I can see you have a combat system script for Owlbear Rodeo. What would you like me to help you modify? 
+const btn = document.getElementById("btn");
 
-For example, I can help you:
-- Add new features (healing, status effects, etc.)
-- Fix bugs or improve the dice rolling logic
-- Refactor code for better organization
-- Add validation or error handling
-- Improve the UI panels
+btn.onclick = async () => {
+  const tokens = await OBR.scene.items.getItems(
+    item => item.layer === "CHARACTER" && item.selected
+  );
 
-What change would you like to make?
+  for (const token of tokens) {
+    await OBR.scene.items.updateItems([token.id], items => {
+      items[0].x += 100;
+    });
+  }
+};
