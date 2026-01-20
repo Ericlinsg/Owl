@@ -1,94 +1,134 @@
-<!-- Se ainda não incluiu o SDK no seu index.html, adicione antes do seu script -->
-<script src="https://unpkg.com/@owlbear-rodeo/sdk/dist/sdk.min.js"></script>
+// Espera o Owlbear Rodeo estar pronto
+OBR.onReady(async () => {
+  console.log("Combat Helper carregado!");
 
-<script>
-  // Espera o Owlbear Rodeo estar pronto
-  OBR.onReady(() => {
+  // Cria itens de menu de contexto
+  createContextMenu();
 
-    // =============================
-    // 1️⃣ Adiciona "Add To Combat" no menu de contexto
-    // =============================
-    OBR.contextMenu.createItem({
-      id: "combat-helper/add-to-combat",
-      label: "Add To Combat",
-      filter: {
-        type: "token",
-        layer: ["CHARACTER", "MOUNT"]
-      },
-      onClick: async (context) => {
-        const tokenId = context.token.id;
-        await addToCombat(tokenId);
-      }
-    });
+  // Mostra a lista de tokens em combate
+  await refreshCombatList();
+});
 
-    // =============================
-    // 2️⃣ Adiciona "Remove From Combat" no menu de contexto
-    // =============================
-    OBR.contextMenu.createItem({
-      id: "combat-helper/remove-from-combat",
-      label: "Remove From Combat",
-      filter: {
-        type: "token",
-        layer: ["CHARACTER", "MOUNT"]
-      },
-      onClick: async (context) => {
-        const tokenId = context.token.id;
-        await removeFromCombat(tokenId);
-      }
-    });
-
-    console.log("Combat Helper ready!");
+// =============================
+// Cria menus de contexto
+// =============================
+function createContextMenu() {
+  // Add to Combat
+  OBR.contextMenu.createItem({
+    id: "combat-helper/add-to-combat",
+    label: "Add To Combat",
+    filter: {
+      type: "token",
+      layer: ["CHARACTER", "MOUNT"]
+    },
+    onClick: async (context) => {
+      await addToCombat(context.token.id);
+      await refreshCombatList();
+    }
   });
 
-  // =============================
-  // 3️⃣ Função que adiciona o token ao combate
-  // =============================
-  async function addToCombat(tokenId) {
-    const token = await OBR.scene.getToken({ id: tokenId });
+  // Remove from Combat
+  OBR.contextMenu.createItem({
+    id: "combat-helper/remove-from-combat",
+    label: "Remove From Combat",
+    filter: {
+      type: "token",
+      layer: ["CHARACTER", "MOUNT"]
+    },
+    onClick: async (context) => {
+      await removeFromCombat(context.token.id);
+      await refreshCombatList();
+    }
+  });
+}
 
-    const combatData = {
-      inCombat: true,
-      hp: token.metadata.hp || 0,
-      ac: token.metadata.ac || 10,
-      initiative: token.metadata.initiative || 0
-    };
+// =============================
+// Adiciona token ao combate
+// =============================
+async function addToCombat(tokenId) {
+  const token = await OBR.scene.getToken({ id: tokenId });
+
+  const combatData = {
+    inCombat: true,
+    hp: token.metadata.hp || 0,
+    ac: token.metadata.ac || 10,
+    initiative: token.metadata.initiative || 0
+  };
+
+  await OBR.scene.updateToken({
+    id: tokenId,
+    metadata: {
+      ...token.metadata,
+      combat: combatData
+    }
+  });
+
+  OBR.notification.show(`Token "${token.name}" adicionado ao combate!`);
+}
+
+// =============================
+// Remove token do combate
+// =============================
+async function removeFromCombat(tokenId) {
+  const token = await OBR.scene.getToken({ id: tokenId });
+
+  if (token.metadata.combat) {
+    const newMetadata = { ...token.metadata };
+    delete newMetadata.combat;
 
     await OBR.scene.updateToken({
       id: tokenId,
-      metadata: {
-        ...token.metadata,
-        combat: combatData
-      }
+      metadata: newMetadata
     });
 
-    OBR.notification.show(`Token "${token.name}" adicionado ao combate!`);
+    OBR.notification.show(`Token "${token.name}" removido do combate!`);
+  }
+}
+
+// =============================
+// Lista todos tokens em combate e atualiza UI
+// =============================
+async function refreshCombatList() {
+  const listContainer = document.getElementById("combat-list");
+  const sceneTokens = await OBR.scene.getTokens();
+  const combatTokens = sceneTokens.filter(t => t.metadata.combat && t.metadata.combat.inCombat);
+
+  if (combatTokens.length === 0) {
+    listContainer.innerHTML = "<p>Nenhum token em combate.</p>";
+    return;
   }
 
-  // =============================
-  // 4️⃣ Função que remove o token do combate
-  // =============================
-  async function removeFromCombat(tokenId) {
-    const token = await OBR.scene.getToken({ id: tokenId });
+  listContainer.innerHTML = "";
+  combatTokens.forEach(token => {
+    const div = document.createElement("div");
+    div.className = "combat-token";
+    div.innerHTML = `
+      <span>${token.name} (HP: ${token.metadata.combat.hp})</span>
+      <span>
+        <button onclick="attackToken('${token.id}')">Atacar</button>
+        <button onclick="removeFromCombat('${token.id}'); refreshCombatList();">Remover</button>
+      </span>
+    `;
+    listContainer.appendChild(div);
+  });
+}
 
-    if (token.metadata.combat) {
-      const newMetadata = { ...token.metadata };
-      delete newMetadata.combat;
+// =============================
+// Função de ataque simples (exemplo)
+// =============================
+async function attackToken(tokenId) {
+  const token = await OBR.scene.getToken({ id: tokenId });
+  const damage = Math.floor(Math.random() * 6) + 1; // 1d6
+  const hp = (token.metadata.combat.hp || 0) - damage;
 
-      await OBR.scene.updateToken({
-        id: tokenId,
-        metadata: newMetadata
-      });
-
-      OBR.notification.show(`Token "${token.name}" removido do combate!`);
+  await OBR.scene.updateToken({
+    id: tokenId,
+    metadata: {
+      ...token.metadata,
+      combat: { ...token.metadata.combat, hp }
     }
-  }
+  });
 
-  // =============================
-  // 5️⃣ Função opcional: retorna todos tokens em combate
-  // =============================
-  async function getCombatTokens() {
-    const sceneTokens = await OBR.scene.getTokens();
-    return sceneTokens.filter(t => t.metadata.combat && t.metadata.combat.inCombat);
-  }
-
-</script>
+  OBR.notification.show(`${token.name} sofreu ${damage} de dano! (HP: ${hp})`);
+  await refreshCombatList();
+}
