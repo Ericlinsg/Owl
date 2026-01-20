@@ -1,28 +1,29 @@
 body {
-    font-family: sans-serif;
-    background: #1e1e1e;
-    color: #eee;
-    padding: 10px;
+  font-family: sans-serif;
+  padding: 10px;
+  width: 300px;
 }
 
 h2 {
-    margin-top: 0;
+  margin-top: 0;
+  font-size: 18px;
 }
 
-input, button {
-    width: 100%;
-    margin-top: 6px;
-    padding: 6px;
-    font-size: 14px;
+#combat-list {
+  margin-top: 10px;
+}
+
+.combat-token {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 6px;
+  padding: 4px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
 }
 
 button {
-    cursor: pointer;
-    background: #444;
-    color: #fff;
-    border: none;
-}
-
-button:hover {
-    background: #666;
+  font-size: 12px;
+  margin-left: 4px;
+  cursor: pointer;
 }
