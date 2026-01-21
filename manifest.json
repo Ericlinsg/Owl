@@ -11,9 +11,12 @@
     "height": 500
   },
 
-  "permissions": {
-    "external": [
-      "https://docs.google.com"
-    ]
-  }
+  "permissions": [
+    {
+      "name": "external",
+      "urls": [
+        "https://docs.google.com"
+      ]
+    }
+  ]
 }
