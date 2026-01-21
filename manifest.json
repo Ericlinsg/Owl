@@ -8,6 +8,5 @@
     "popover": "index.html",
     "width": 300,
     "height": 200
-  },
-  "background": "back.js"
+  }
 }
