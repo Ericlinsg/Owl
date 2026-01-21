@@ -1,29 +1,26 @@
 body {
-  font-family: sans-serif;
-  padding: 10px;
-  width: 300px;
+  margin: 0;
+  background: #1e1e1e;
 }
 
-h2 {
-  margin-top: 0;
-  font-size: 18px;
+/* Janela visível (tamanho do intervalo B2:Y18) */
+#sheet-viewport {
+  width: 900px;    /* ajuste fino */
+  height: 420px;   /* ajuste fino */
+  overflow: hidden;
+  position: relative;
+  border: 1px solid #444;
 }
 
-#combat-list {
-  margin-top: 10px;
-}
+/* Planilha inteira deslocada */
+#sheet-frame {
+  width: 1400px;   /* largura total da planilha */
+  height: 900px;   /* altura total */
+  position: absolute;
 
-.combat-token {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 6px;
-  padding: 4px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
+  /* 👇 AQUI É O RECORTE */
+  left: -100px;    /* desloca até coluna B */
+  top: -90px;      /* desloca até linha 2 */
 
-button {
-  font-size: 12px;
-  margin-left: 4px;
-  cursor: pointer;
+  border: none;
 }
