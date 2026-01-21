@@ -7,7 +7,24 @@
     "title": "Combat Helper",
     "icon": "icon.svg",
     "popover": "index.html",
+    "width": 950,{
+  "name": "Combat Helper",
+  "version": "1.0.0",
+  "manifest_version": 1,
+
+  "action": {
+    "title": "Combat Helper",
+    "icon": "icon.svg",
+    "popover": "index.html",
     "width": 950,
+    "height": 500
+  },
+
+  "permissions": [
+    "external:https://docs.google.com"
+  ]
+}
+
     "height": 500
   },
 
