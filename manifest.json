@@ -1,12 +1,15 @@
 {
-  "name": "Combat Helper",
+  "name": "Music Player",
   "version": "1.0.0",
   "manifest_version": 1,
+
+  "icon": "/icon.png",
+
   "action": {
-    "title": "Combat Helper",
-    "icon": "icon.svg",
-    "popover": "https://ericlinsg.github.io/Owl/index.html",
-    "width": 950,
-    "height": 500
+    "title": "Music",
+    "icon": "/icon.png",
+    "popover": "index.html",
+    "width": 260,
+    "height": 200
   }
 }
