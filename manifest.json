@@ -3,12 +3,12 @@
   "version": "1.0.0",
   "manifest_version": 1,
 
-  "icon": "/icon.png",
+  "icon": "https://github.com/Ericlinsg/Owl/icon.png",
 
   "action": {
     "title": "Music",
     "icon": "/icon.png",
-    "popover": "index.html",
+    "popover": "https://github.com/Ericlinsg/Owl/index.html",
     "width": 260,
     "height": 200
   }
