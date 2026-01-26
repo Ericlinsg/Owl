@@ -1,26 +1,33 @@
 body {
   margin: 0;
   background: #1e1e1e;
+  color: white;
+  font-family: Arial;
 }
 
-/* Janela visível (tamanho do intervalo B2:Y18) */
-#sheet-viewport {
-  width: 900px;    /* ajuste fino */
-  height: 420px;   /* ajuste fino */
-  overflow: hidden;
-  position: relative;
-  border: 1px solid #444;
+#player {
+  padding: 10px;
 }
 
-/* Planilha inteira deslocada */
-#sheet-frame {
-  width: 1400px;   /* largura total da planilha */
-  height: 900px;   /* altura total */
-  position: absolute;
+input {
+  width: 100%;
+  margin-bottom: 6px;
+}
 
-  /* 👇 AQUI É O RECORTE */
-  left: -100px;    /* desloca até coluna B */
-  top: -90px;      /* desloca até linha 2 */
+.controls {
+  display: flex;
+  gap: 6px;
+}
 
+button {
+  flex: 1;
+  background: #444;
   border: none;
+  color: white;
+  padding: 6px;
+  border-radius: 4px;
+}
+
+button:hover {
+  background: #666;
 }
